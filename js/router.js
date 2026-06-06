@@ -487,7 +487,7 @@ function initContactForm() {
 
         const payload = {
             // PASTE YOUR ACCESS KEY HERE
-            access_key: "YOUR_WEB3FORMS_ACCESS_KEY_HERE", 
+            access_key: "32e1284f-7ae5-4a5d-9c79-a5fb7892b7f6", 
             name: document.getElementById("form-name").value,
             email: document.getElementById("form-email").value,
             message: document.getElementById("form-message").value,
