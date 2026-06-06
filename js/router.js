@@ -473,67 +473,53 @@ function renderCurrentView() {
 }
 
 function initContactForm() {
-    const form = document.getElementById('inquiry-form');
-    const feedback = document.getElementById('form-feedback');
-    const itemSelect = document.getElementById('form-item');
+    const form = document.getElementById("inquiry-form");
     if (!form) return;
 
-    if (itemSelect) {
-        const selectedItem = state.selectedInquiryItem ? products.find(item => item.id === state.selectedInquiryItem) : null;
-        itemSelect.innerHTML = '<option value="">Select an item (optional)</option>' + products.slice(0, 12).map(item => `
-            <option value="${item.id}" ${selectedItem && selectedItem.id === item.id ? 'selected' : ''}>${item.title}</option>
-        `).join('');
-        if (selectedItem) {
-            itemSelect.insertAdjacentHTML('afterbegin', `<option value="${selectedItem.id}" selected>${selectedItem.title}</option>`);
-        }
-    }
-
-    if (feedback) {
-        feedback.textContent = '';
-        feedback.className = 'form-feedback';
-    }
-
-    form.addEventListener('submit', (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        const name = document.getElementById('form-name').value.trim();
-        const email = document.getElementById('form-email').value.trim();
-        const subject = document.getElementById('form-subject').value.trim();
-        const phone = document.getElementById('form-phone').value.trim();
-        const message = document.getElementById('form-message').value.trim();
-
-        const emailPattern = /^\S+@\S+\.\S+$/;
-        if (!name || !email || !subject || !message) {
-            if (feedback) {
-                feedback.textContent = 'Please complete all required fields before sending your inquiry.';
-                feedback.className = 'form-feedback error';
-            }
-            return;
-        }
-        if (!emailPattern.test(email)) {
-            if (feedback) {
-                feedback.textContent = 'Please enter a valid email address.';
-                feedback.className = 'form-feedback error';
-            }
-            return;
-        }
+        
+        // Grab the submit button to show a loading state
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = "Sending... ⏳";
+        submitBtn.disabled = true;
 
         const payload = {
-            name,
-            email,
-            subject,
-            itemId: itemSelect ? itemSelect.value : '',
-            phone,
-            message,
-            submittedAt: new Date().toISOString()
+            // PASTE YOUR ACCESS KEY HERE
+            access_key: "YOUR_WEB3FORMS_ACCESS_KEY_HERE", 
+            name: document.getElementById("form-name").value,
+            email: document.getElementById("form-email").value,
+            message: document.getElementById("form-message").value,
+            subject: `New Crochet Inquiry from ${document.getElementById("form-name").value}`
         };
 
-        console.log('Inquiry Submitted Successfully:', payload);
-        if (feedback) {
-            feedback.textContent = `Thanks ${name}! Your inquiry has been sent successfully.`;
-            feedback.className = 'form-feedback success';
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert(`Thanks ${payload.name}! Your inquiry has been sent straight to Suman's inbox. 💌`);
+                form.reset();
+            } else {
+                throw new Error("Form submission failed backend check.");
+            }
+        } catch (error) {
+            console.error("Submission Error:", error);
+            alert("Oops! Something went wrong while sending the message. Please try again.");
+        } finally {
+            // Restore the button state
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
         }
-        form.reset();
     });
 }
 
