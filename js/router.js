@@ -16,7 +16,7 @@ const views = {
         <div class="container">
             <header class="hero">
                 <h1>Handmade Magic!</h1>
-                <p>100% Handcrafted by Suman</p>
+                <p>100% handcrafted</p>
             </header>
 
             <h2 class="section-title">The Collection</h2>
