@@ -491,20 +491,25 @@ function initContactForm() {
     };
 
     try {
-      // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
-      const response = await fetch("https://script.google.com/macros/s/AKfycbxKvO1Sz-FBvHF1OpZcOVQuvB4eapqFAs7fF9KbP9nXk4rxV3vJqCu5sKr2U7NLqkEX/exec", {
+      // REPLACE WITH YOUR ACTUAL GOOGLE APPS SCRIPT URL
+      const scriptURL = "https://script.google.com/macros/s/AKfycbxKvO1Sz-FBvHF1OpZcOVQuvB4eapqFAs7fF9KbP9nXk4rxV3vJqCu5sKr2U7NLqkEX/exec";
+
+      // Using mode: "no-cors" forces the browser to send the payload safely 
+      // without getting blocked by Google's server redirect headers.
+      await fetch(scriptURL, {
         method: "POST",
+        mode: "no-cors", 
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(payload)
       });
 
-      const result = await response.json();
+      // Because "no-cors" opaque responses won't let us read response status, 
+      // we assume success if no hard network error was thrown.
+      alert(`Thanks ${payload.name}! Your inquiry has been sent straight to Suman's inbox. 💌`);
+      form.reset();
 
-      if (result.result === "success") {
-        alert(`Thanks ${payload.name}! Your inquiry has been sent straight to Suman's inbox. 💌`);
-        form.reset();
-      } else {
-        throw new Error(result.error);
-      }
     } catch (error) {
       console.error("Submission Error:", error);
       alert("Oops! Something went wrong while sending the message. Please try again.");
