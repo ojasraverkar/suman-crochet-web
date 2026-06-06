@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suman Crochet | Fun & Handcrafted</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+
+    <nav>
+        <a href="#/" class="logo-container">
+            <img src="./assets/images/logo.png" alt="Suman Crochet Logo">
+            <span class="logo-text">Suman Crochet</span>
+        </a>
+        <div class="nav-links">
+            <a href="#/catalog" class="btn btn-yellow">Shop</a>
+            <a href="#/wishlist" class="btn btn-pink">Wishlist <span id="nav-wishlist-count" class="badge">0</span></a>
+            <a href="#/contact" class="btn btn-pink">Contact</a>
+        </div>
+    </nav>
+
+    <main id="app"></main>
+
+    <div id="lightbox" class="lightbox-overlay" role="dialog" aria-modal="true" tabindex="-1" onclick="closeLightbox()">
+        <span class="lightbox-close" aria-label="Close lightbox">&times;</span>
+        <img id="lightbox-img" src="" alt="Enlarged product view">
+        <h3 id="lightbox-caption"></h3>
+    </div>
+
+    <script src="./js/router.js" type="module"></script>
+</body>
+</html>
