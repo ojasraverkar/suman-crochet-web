@@ -473,54 +473,46 @@ function renderCurrentView() {
 }
 
 function initContactForm() {
-    const form = document.getElementById("inquiry-form");
-    if (!form) return;
+  const form = document.getElementById("inquiry-form");
+  if (!form) return;
 
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        
-        // Grab the submit button to show a loading state
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.innerHTML = "Sending... ⏳";
-        submitBtn.disabled = true;
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = "Sending... ⏳";
+    submitBtn.disabled = true;
 
-        const payload = {
-            // PASTE YOUR ACCESS KEY HERE
-            access_key: "32e1284f-7ae5-4a5d-9c79-a5fb7892b7f6", 
-            name: document.getElementById("form-name").value,
-            email: document.getElementById("form-email").value,
-            message: document.getElementById("form-message").value,
-            subject: `New Crochet Inquiry from ${document.getElementById("form-name").value}`
-        };
+    const payload = {
+      name: document.getElementById("form-name").value,
+      email: document.getElementById("form-email").value,
+      message: document.getElementById("form-message").value
+    };
 
-        try {
-            const response = await fetch("https://api.web3forms.com/submit", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(payload)
-            });
+    try {
+      // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+      const response = await fetch("https://script.google.com/macros/s/AKfycbxKvO1Sz-FBvHF1OpZcOVQuvB4eapqFAs7fF9KbP9nXk4rxV3vJqCu5sKr2U7NLqkEX/exec", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
 
-            const result = await response.json();
+      const result = await response.json();
 
-            if (result.success) {
-                alert(`Thanks ${payload.name}! Your inquiry has been sent straight to Suman's inbox. 💌`);
-                form.reset();
-            } else {
-                throw new Error("Form submission failed backend check.");
-            }
-        } catch (error) {
-            console.error("Submission Error:", error);
-            alert("Oops! Something went wrong while sending the message. Please try again.");
-        } finally {
-            // Restore the button state
-            submitBtn.innerHTML = originalBtnText;
-            submitBtn.disabled = false;
-        }
-    });
+      if (result.result === "success") {
+        alert(`Thanks ${payload.name}! Your inquiry has been sent straight to Suman's inbox. 💌`);
+        form.reset();
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+      alert("Oops! Something went wrong while sending the message. Please try again.");
+    } finally {
+      submitBtn.innerHTML = originalBtnText;
+      submitBtn.disabled = false;
+    }
+  });
 }
 
 window.openLightbox = function(src, title) {
