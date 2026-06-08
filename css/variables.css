@@ -27,4 +27,8 @@ body {
     background-color: var(--bg-color);
     background-image: radial-gradient(var(--black) 1px, transparent 1px);
     background-size: 30px 30px; /* Playful background polka dot pattern */
+    font-size: 16px;
+    line-height: 1.5;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
 }

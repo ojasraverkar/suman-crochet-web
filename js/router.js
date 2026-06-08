@@ -11,6 +11,17 @@ const state = {
     currentRoute: ''
 };
 
+const categoryLabels = {
+    bookmarks: 'Bookmarks',
+    earrings: 'Earrings',
+    'hair-accessories': 'Hair Accessories',
+    toys: 'Toys'
+};
+
+function getCategoryLabel(category) {
+    return categoryLabels[category] || 'Items';
+}
+
 const views = {
     home: `
         <div class="container">
@@ -23,35 +34,35 @@ const views = {
             
             <div class="grid">
                 <div class="card">
-                    <div class="card-img-wrapper" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/reading'">🔖</div>
+                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/bookmarks'">Bookmarks</div>
                     <div class="card-content">
                         <div>
                             <h3 class="card-title">Bookmarks</h3>
                             <p class="card-desc">Delicate, colorful structures to hold your place perfectly.</p>
                         </div>
-                        <a href="#/catalog/reading" class="btn btn-yellow" style="display: block; text-decoration: none; text-align: center;">Explore</a>
+                        <a href="#/catalog/bookmarks" class="btn btn-yellow" style="display: block; text-decoration: none; text-align: center;">Explore</a>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-img-wrapper" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/accessories'">🌸</div>
+                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/earrings'">Earrings</div>
                     <div class="card-content">
                         <div>
                             <h3 class="card-title">Earrings</h3>
                             <p class="card-desc">Intricately patterned, lightweight statements.</p>
                         </div>
-                        <a href="#/catalog/accessories" class="btn btn-yellow" style="display: block; text-decoration: none; text-align: center;">Explore</a>
+                        <a href="#/catalog/earrings" class="btn btn-yellow" style="display: block; text-decoration: none; text-align: center;">Explore</a>
                     </div>
                 </div>
 
                 <div class="card">
-                    <div class="card-img-wrapper" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/accessories'">🎀</div>
+                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/hair-accessories'">Hair</div>
                     <div class="card-content">
                         <div>
                             <h3 class="card-title">Hair Accessories</h3>
                             <p class="card-desc">Charming, highly durable scrunchies and bands.</p>
                         </div>
-                        <a href="#/catalog/accessories" class="btn btn-yellow" style="display: block; text-decoration: none; text-align: center;">Explore</a>
+                        <a href="#/catalog/hair-accessories" class="btn btn-yellow" style="display: block; text-decoration: none; text-align: center;">Explore</a>
                     </div>
                 </div>
 
@@ -91,7 +102,7 @@ const views = {
                 </div>
                 <div class="catalog-actions">
                     <div class="search-group">
-                        <input id="catalog-search" class="search-input" type="search" placeholder="Search bookmarks, earrings, accessories, toys..." aria-label="Search products">
+                        <input id="catalog-search" class="search-input" type="search" placeholder="Search bookmarks, earrings, hair accessories..." aria-label="Search products">
                         <div id="search-suggestions" class="search-suggestions" role="listbox" aria-label="Search suggestions"></div>
                     </div>
                     <a href="#/wishlist" class="btn btn-pink">Wishlist <span id="wishlist-count" class="badge">0</span></a>
@@ -103,9 +114,9 @@ const views = {
                     <label>Category</label>
                     <div>
                         <button class="btn btn-yellow active-filter" data-filter="all">All Items</button>
-                        <button class="btn" data-filter="reading">Reading</button>
-                        <button class="btn" data-filter="accessories">Accessories</button>
-                        <button class="btn" data-filter="toys">Toys</button>
+                        <button class="btn" data-filter="bookmarks">Bookmarks</button>
+                        <button class="btn" data-filter="earrings">Earrings</button>
+                        <button class="btn" data-filter="hair-accessories">Hair Accessories</button>
                     </div>
                 </div>
                 <div class="filter-group">
@@ -171,6 +182,8 @@ const views = {
                             <option value="">Select an item (optional)</option>
                         </select>
                     </div>
+
+                    <div id="selected-product-preview" class="inquiry-product-preview" hidden></div>
 
                     <div class="form-control">
                         <label>Subject</label>
@@ -248,6 +261,9 @@ function handleLocation() {
     } else {
         appContainer.innerHTML = views.home;
     }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateQuickNav();
 }
 
 function renderCatalog(filterValue, searchQuery = '', wishlistPage = false) {
@@ -281,7 +297,7 @@ function renderCatalog(filterValue, searchQuery = '', wishlistPage = false) {
     gridContainer.innerHTML = filteredProducts.map(item => {
         const cardSrc = getImageUrl(item.imageId);
         let fallbackEmoji = '🧵';
-        if (item.category === 'reading') fallbackEmoji = '🔖';
+        if (item.category === 'bookmarks') fallbackEmoji = '🔖';
         if (item.category === 'toys') fallbackEmoji = '🧸';
         if (item.id.startsWith('e')) fallbackEmoji = '🌸';
         if (item.id.startsWith('h')) fallbackEmoji = '🎀';
@@ -385,12 +401,15 @@ function highlightCategoryHeader() {
     const catalogTitle = document.getElementById('catalog-title');
     const catalogMeta = document.getElementById('catalog-meta');
     if (!catalogTitle || !catalogMeta) return;
-    if (state.filter === 'reading') {
-        catalogTitle.textContent = 'Bookmarks & Reading Accessories';
+    if (state.filter === 'bookmarks') {
+        catalogTitle.textContent = 'Bookmarks';
         catalogMeta.textContent = 'Find the perfect stitched bookmark for your reading ritual.';
-    } else if (state.filter === 'accessories') {
-        catalogTitle.textContent = 'Handmade Accessories';
-        catalogMeta.textContent = 'Explore earrings and hair pieces in soft, natural tones.';
+    } else if (state.filter === 'earrings') {
+        catalogTitle.textContent = 'Crochet Earrings';
+        catalogMeta.textContent = 'Lightweight handmade earrings for everyday wear and gifting.';
+    } else if (state.filter === 'hair-accessories') {
+        catalogTitle.textContent = 'Hair Accessories';
+        catalogMeta.textContent = 'Charming handmade bands, clips, and scrunchies.';
     } else if (state.filter === 'toys') {
         catalogTitle.textContent = 'Crochet Toys';
         catalogMeta.textContent = 'Soft toys crafted for playtime, gifting, and keepsakes.';
@@ -476,6 +495,35 @@ function initContactForm() {
   const form = document.getElementById("inquiry-form");
   if (!form) return;
 
+  const itemSelect = document.getElementById("form-item");
+  const selectedProduct = products.find(p => p.id === state.selectedInquiryItem);
+
+  if (itemSelect) {
+    itemSelect.innerHTML = `
+      <option value="">Select an item (optional)</option>
+      ${products.map(product => `<option value="${product.id}">${product.title}</option>`).join('')}
+    `;
+    if (selectedProduct) {
+      itemSelect.value = selectedProduct.id;
+    }
+    itemSelect.addEventListener('change', () => {
+      renderInquiryProductPreview(products.find(p => p.id === itemSelect.value));
+    });
+  }
+
+  if (selectedProduct) {
+    const subjectInput = document.getElementById("form-subject");
+    const messageInput = document.getElementById("form-message");
+    if (subjectInput && !subjectInput.value) {
+      subjectInput.value = `Inquiry about ${selectedProduct.title}`;
+    }
+    if (messageInput && !messageInput.value) {
+      messageInput.value = `Hello, I am interested in the ${selectedProduct.title}. Please share availability, shipping, and pricing details.`;
+    }
+  }
+
+  renderInquiryProductPreview(selectedProduct);
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     
@@ -487,6 +535,10 @@ function initContactForm() {
     const payload = {
       name: document.getElementById("form-name").value,
       email: document.getElementById("form-email").value,
+      itemId: itemSelect ? itemSelect.value : "",
+      itemTitle: itemSelect ? (products.find(p => p.id === itemSelect.value) || {}).title || "" : "",
+      itemPrice: itemSelect ? (products.find(p => p.id === itemSelect.value) || {}).price || "" : "",
+      subject: document.getElementById("form-subject").value,
       message: document.getElementById("form-message").value
     };
 
@@ -505,8 +557,6 @@ function initContactForm() {
         body: JSON.stringify(payload)
       });
 
-      // Because "no-cors" opaque responses won't let us read response status, 
-      // we assume success if no hard network error was thrown.
       alert(`Thanks ${payload.name}! Your inquiry has been sent straight to Suman's inbox. 💌`);
       form.reset();
 
@@ -518,6 +568,25 @@ function initContactForm() {
       submitBtn.disabled = false;
     }
   });
+}
+
+function renderInquiryProductPreview(product) {
+  const preview = document.getElementById("selected-product-preview");
+  if (!preview) return;
+  if (!product) {
+    preview.hidden = true;
+    preview.innerHTML = "";
+    return;
+  }
+
+  preview.hidden = false;
+  preview.innerHTML = `
+    <img src="${getImageUrl(product.imageId)}" alt="${product.title}" loading="lazy" decoding="async">
+    <div>
+      <h3>${product.title}</h3>
+      <p>${getCategoryLabel(product.category)} · ₹${product.price}</p>
+    </div>
+  `;
 }
 
 window.openLightbox = function(src, title) {
@@ -544,9 +613,27 @@ window.closeLightbox = function() {
 
 window.addEventListener('hashchange', handleLocation);
 document.addEventListener('DOMContentLoaded', handleLocation);
+document.addEventListener('DOMContentLoaded', initQuickNav);
+window.addEventListener('scroll', updateQuickNav, { passive: true });
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
 });
+
+function initQuickNav() {
+    const scrollTopButton = document.getElementById('scroll-top-button');
+    if (scrollTopButton) {
+        scrollTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+    updateQuickNav();
+}
+
+function updateQuickNav() {
+    const scrollTopButton = document.getElementById('scroll-top-button');
+    if (!scrollTopButton) return;
+    scrollTopButton.classList.toggle('is-visible', window.scrollY > 240);
+}
 
 function renderProductDetail(product) {
     const colorsHtml = (product.colors || []).map(color => `<span class="product-chip">${color}</span>`).join('');
@@ -558,7 +645,7 @@ function renderProductDetail(product) {
                     <img src="${getImageUrl(product.imageId)}" alt="${product.title}" loading="lazy" decoding="async">
                 </div>
                 <div class="product-detail-copy">
-                    <span class="product-category">${product.category.toUpperCase()}</span>
+                    <span class="product-category">${getCategoryLabel(product.category).toUpperCase()}</span>
                     <h2 class="section-title">${product.title}</h2>
                     <p class="product-price-detail">₹${product.price}</p>
                     <p class="card-desc">${product.desc}</p>
@@ -569,7 +656,7 @@ function renderProductDetail(product) {
                     <div class="product-actions">
                         <button type="button" class="btn btn-pink" id="product-wishlist-button" data-wishlist-id="${product.id}">${state.wishlist.includes(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}</button>
                         <a href="#/contact/${product.id}" class="btn btn-yellow">Inquire About This Item</a>
-                        <a href="#/catalog/${product.category}" class="btn">Back to ${product.category}</a>
+                        <a href="#/catalog/${product.category}" class="btn">Back to ${getCategoryLabel(product.category)}</a>
                     </div>
                 </div>
             </div>

@@ -24,7 +24,8 @@ nav {
     font-size: 2rem;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: -0.5px;
+    letter-spacing: 0;
+    line-height: 1;
 }
 
 .nav-links {
@@ -39,6 +40,7 @@ nav {
     padding: 0.6rem 1.4rem;
     font-weight: 900;
     font-size: 1.1rem;
+    line-height: 1.1;
     text-transform: uppercase;
     cursor: pointer;
     box-shadow: var(--shadow-solid);
@@ -54,6 +56,53 @@ nav {
 
 .btn-pink { background-color: var(--pink); }
 .btn-yellow { background-color: var(--yellow); }
+
+.quick-nav {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 900;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-end;
+}
+
+.quick-nav-button {
+    min-width: 92px;
+    padding: 0.65rem 0.95rem;
+    border: var(--border-thick);
+    box-shadow: var(--shadow-solid);
+    color: var(--black);
+    font-size: 0.95rem;
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.quick-nav-button:hover,
+.quick-nav-button:focus {
+    transform: translate(4px, 4px);
+    box-shadow: var(--shadow-hover);
+    outline: none;
+}
+
+.quick-nav-top {
+    background-color: var(--yellow);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+}
+
+.quick-nav-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
 
 /* Main Dynamic Window Containers */
 .container {
@@ -73,10 +122,10 @@ nav {
 }
 
 .hero h1 {
-    font-size: 4.5rem;
+    font-size: clamp(2.8rem, 7vw, 4.5rem);
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: -1px;
+    letter-spacing: 0;
     line-height: 1;
     margin-bottom: 1.5rem;
     color: var(--yellow);
@@ -97,9 +146,10 @@ nav {
 
 /* Catalog View Header Element Blocks */
 .section-title {
-    font-size: 2.2rem;
+    font-size: clamp(1.65rem, 4vw, 2.2rem);
     font-weight: 900;
     text-transform: uppercase;
+    line-height: 1.08;
     margin-bottom: 2.5rem;
     background-color: var(--pink);
     display: inline-block;
@@ -133,6 +183,7 @@ nav {
 .card-img-wrapper {
     aspect-ratio: 4 / 3;
     min-height: 240px;
+    padding: 0.75rem;
     border-bottom: var(--border-thick);
     display: flex;
     align-items: center;
@@ -141,6 +192,16 @@ nav {
     overflow: hidden;
     cursor: zoom-in;
     background-color: var(--pink);
+}
+
+.category-tile {
+    padding: 1rem;
+    color: var(--black);
+    font-size: 1.7rem;
+    font-weight: 900;
+    line-height: 1.05;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .grid .card:nth-child(2n) .card-img-wrapper { background-color: var(--blue); }
@@ -153,6 +214,7 @@ nav {
     object-fit: contain;
     display: block;
     background-color: var(--white);
+    border: 2px solid rgba(26, 26, 26, 0.12);
 }
 
 .card-content {
@@ -168,6 +230,7 @@ nav {
     font-size: 1.5rem;
     font-weight: 900;
     text-transform: uppercase;
+    line-height: 1.18;
     margin-bottom: 0.5rem;
 }
 
@@ -175,7 +238,25 @@ nav {
     font-size: 1.05rem;
     font-weight: 700;
     color: #4a4a4a;
-    margin-bottom: 1.5rem;
+    line-height: 1.45;
+    margin-bottom: 1rem;
+}
+
+.card-price {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-width: 92px;
+    margin: 0 auto 1.2rem;
+    padding: 0.25rem 0.85rem;
+    background-color: var(--white);
+    border: 3px solid var(--black);
+    box-shadow: 3px 3px 0 var(--black);
+    color: var(--black);
+    font-size: 1.25rem;
+    font-weight: 900;
+    line-height: 1.1;
 }
 
 /* Global Lightbox Window Modals */
@@ -212,7 +293,7 @@ nav {
     font-size: 1.3rem;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0;
     border: 2px solid var(--white);
 }
 
@@ -236,9 +317,10 @@ nav {
 }
 
 .catalog-meta {
-    color: #4a4a4a;
-    font-size: 1rem;
-    font-weight: 700;
+    color: #343434;
+    font-size: 1.08rem;
+    font-weight: 800;
+    line-height: 1.35;
     margin-top: 0.25rem;
 }
 
@@ -259,12 +341,18 @@ nav {
     min-width: 250px;
     width: 100%;
     max-width: 100%;
-    padding: 0.9rem 1rem;
+    padding: 1rem 1.1rem;
     border: var(--border-thick);
     background-color: var(--bg-color);
     outline: none;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.search-input::placeholder {
+    color: #626262;
+    opacity: 1;
 }
 
 .search-suggestions {
@@ -280,6 +368,10 @@ nav {
     z-index: 20;
 }
 
+.search-suggestions:empty {
+    display: none;
+}
+
 .search-suggestion {
     width: 100%;
     padding: 0.85rem 1rem;
@@ -287,7 +379,8 @@ nav {
     background: transparent;
     text-align: left;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
+    line-height: 1.25;
     cursor: pointer;
 }
 
@@ -299,15 +392,25 @@ nav {
 
 .filter-select {
     width: 100%;
-    padding: 0.9rem 1rem;
+    padding: 1rem 1.1rem;
     border: var(--border-thick);
     background-color: var(--bg-color);
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.25;
 }
 
 .filter-group {
     min-width: 180px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
 }
 
 .product-detail-grid {
@@ -320,9 +423,12 @@ nav {
 
 .product-media img {
     width: 100%;
+    aspect-ratio: 4 / 3;
+    padding: 1rem;
     border: var(--border-thick);
     box-shadow: var(--shadow-solid);
-    object-fit: cover;
+    object-fit: contain;
+    background-color: var(--white);
     display: block;
 }
 
@@ -330,14 +436,20 @@ nav {
     display: inline-block;
     margin-bottom: 1rem;
     font-weight: 900;
-    letter-spacing: 0.1em;
+    letter-spacing: 0;
 }
 
 .product-price-detail {
+    display: inline-flex;
+    width: fit-content;
+    padding: 0.35rem 1rem;
+    background-color: var(--yellow);
+    border: var(--border-thick);
+    box-shadow: var(--shadow-solid);
     font-size: 2rem;
     font-weight: 900;
     margin: 1rem 0;
-    color: var(--blue);
+    color: var(--black);
 }
 
 .product-meta {
@@ -427,6 +539,20 @@ nav {
     .card {
         min-height: auto;
     }
+
+    .quick-nav {
+        right: 0.75rem;
+        bottom: 0.75rem;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .quick-nav-button {
+        min-width: 72px;
+        padding: 0.55rem 0.75rem;
+        font-size: 0.85rem;
+        box-shadow: 4px 4px 0 var(--black);
+    }
 }
 
 .badge {
@@ -468,6 +594,42 @@ nav {
     gap: 1.5rem;
 }
 
+.inquiry-product-preview {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.8rem;
+    border: var(--border-thick);
+    box-shadow: 4px 4px 0 var(--black);
+    background-color: var(--yellow);
+}
+
+.inquiry-product-preview[hidden] {
+    display: none;
+}
+
+.inquiry-product-preview img {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+    border: 3px solid var(--black);
+    background-color: var(--white);
+}
+
+.inquiry-product-preview h3 {
+    font-size: 1.05rem;
+    font-weight: 900;
+    line-height: 1.15;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.inquiry-product-preview p {
+    font-size: 1rem;
+    font-weight: 900;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -484,6 +646,7 @@ nav {
     font-weight: 900;
     text-transform: uppercase;
     font-size: 0.85rem;
+    line-height: 1.2;
 }
 
 .form-control input,
@@ -493,7 +656,8 @@ nav {
     border: var(--border-thick);
     background-color: var(--bg-color);
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
+    line-height: 1.35;
     outline: none;
 }
 
