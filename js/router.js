@@ -510,66 +510,70 @@ function initContactForm() {
 
   renderInquiryProductPreview(selectedProduct);
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    const feedback = document.getElementById("form-feedback");
-    if (feedback) {
-      feedback.textContent = "";
-      feedback.className = "form-feedback";
-    }
+        const feedback = document.getElementById("form-feedback");
+        if (feedback) {
+            feedback.textContent = "";
+            feedback.className = "form-feedback";
+        }
 
-    const phoneValue = document.getElementById("form-phone").value.replace(/\D/g, '');
-    if (!/^\d{10}$/.test(phoneValue)) {
-      if (feedback) {
-        feedback.textContent = "Please enter a valid 10-digit phone number.";
-        feedback.className = "form-feedback error";
-      }
-      return;
-    }
+        const phoneValue = document.getElementById("form-phone").value.replace(/\D/g, '');
+        if (!/^\d{10}$/.test(phoneValue)) {
+            if (feedback) {
+                feedback.textContent = "Please enter a valid 10-digit phone number.";
+                feedback.className = "form-feedback error";
+            }
+            return;
+        }
 
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.innerHTML = "Sending... ⏳";
-    submitBtn.disabled = true;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = "Sending... ⏳";
+        submitBtn.disabled = true;
 
-    const payload = {
-      name: document.getElementById("form-name").value,
-      email: document.getElementById("form-email").value || "",
-      phone: phoneValue,
-      itemId: itemSelect ? itemSelect.value : "",
-      itemTitle: itemSelect ? (products.find(p => p.id === itemSelect.value) || {}).title || "" : "",
-      itemPrice: itemSelect ? (products.find(p => p.id === itemSelect.value) || {}).price || "" : "",
-      subject: document.getElementById("form-subject").value,
-      message: document.getElementById("form-message").value
-    };
+        const selectedProduct = products.find(p => p.id === (itemSelect ? itemSelect.value : ""));
 
-    try {
-      // REPLACE WITH YOUR ACTUAL GOOGLE APPS SCRIPT URL
-      const scriptURL = "https://script.google.com/macros/s/AKfycbxKvO1Sz-FBvHF1OpZcOVQuvB4eapqFAs7fF9KbP9nXk4rxV3vJqCu5sKr2U7NLqkEX/exec";
+        const payload = {
+            name: document.getElementById("form-name").value,
+            email: document.getElementById("form-email").value || "",
+            phone: phoneValue,
+            subject: document.getElementById("form-subject").value,
+            itemTitle: selectedProduct ? selectedProduct.title : "",
+            message: document.getElementById("form-message").value
+        };
 
-      // Using mode: "no-cors" forces the browser to send the payload safely 
-      // without getting blocked by Google's server redirect headers.
-      await fetch(scriptURL, {
-        method: "POST",
-        mode: "no-cors", 
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
+        try {
+            const scriptURL = "https://script.google.com/macros/s/AKfycbxKvO1Sz-FBvHF1OpZcOVQuvB4eapqFAs7fF9KbP9nXk4rxV3vJqCu5sKr2U7NLqkEX/exec";
 
-      alert(`Thanks ${payload.name}! Your inquiry has been sent straight to Suman's inbox. 💌`);
-      form.reset();
+            // Transform object data into plain text payload string to guarantee bypass of CORS restrictions
+            await fetch(scriptURL, {
+                method: "POST",
+                mode: "no-cors", 
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify(payload)
+            });
 
-    } catch (error) {
-      console.error("Submission Error:", error);
-      alert("Oops! Something went wrong while sending the message. Please try again.");
-    } finally {
-      submitBtn.innerHTML = originalBtnText;
-      submitBtn.disabled = false;
-    }
-  });
+            alert(`Thanks ${payload.name}! Your inquiry has been sent straight to Suman's inbox. 💌`);
+            form.reset();
+      
+            const preview = document.getElementById("selected-product-preview");
+            if (preview) {
+                preview.hidden = true;
+                preview.innerHTML = "";
+            }
+
+        } catch (error) {
+            console.error("Submission Error:", error);
+            alert("Oops! Something went wrong while sending the message. Please try again.");
+        } finally {
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+        }
+    });
 }
 
 function renderInquiryProductPreview(product) {
