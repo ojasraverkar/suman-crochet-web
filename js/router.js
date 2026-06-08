@@ -178,7 +178,7 @@ const views = {
 
                     <div class="form-control">
                         <label>Phone Number</label>
-                        <input type="tel" id="form-phone" placeholder="1234567890" pattern="\d{10}" title="Enter 10 digits" required>
+                        <input type="tel" id="form-phone" placeholder="1234567890" required>
                     </div>
 
                     <div class="form-control">
