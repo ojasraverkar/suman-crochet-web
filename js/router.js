@@ -34,7 +34,7 @@ const views = {
             
             <div class="grid">
                 <div class="card">
-                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/bookmarks'">Bookmarks</div>
+                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/bookmarks'">🔖</div>
                     <div class="card-content">
                         <div>
                             <h3 class="card-title">Bookmarks</h3>
@@ -45,7 +45,7 @@ const views = {
                 </div>
 
                 <div class="card">
-                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/earrings'">Earrings</div>
+                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/earrings'">🌸</div>
                     <div class="card-content">
                         <div>
                             <h3 class="card-title">Earrings</h3>
@@ -56,7 +56,7 @@ const views = {
                 </div>
 
                 <div class="card">
-                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/hair-accessories'">Hair</div>
+                    <div class="card-img-wrapper category-tile" style="cursor: pointer;" onclick="window.location.hash = '#/catalog/hair-accessories'">🎀</div>
                     <div class="card-content">
                         <div>
                             <h3 class="card-title">Hair Accessories</h3>
@@ -75,20 +75,6 @@ const views = {
                         </div>
                         <a href="#/catalog/toys" class="btn btn-yellow" style="display: block; text-decoration: none; text-align: center;">Explore</a>
                     </div>
-                </div>
-            </div>
-            <div class="business-highlights">
-                <div class="highlight-card">
-                    <h3>Best Sellers Coming Soon</h3>
-                    <p>Featured handmade favorites will appear here with customer notes.</p>
-                </div>
-                <div class="highlight-card">
-                    <h3>Testimonials Placeholder</h3>
-                    <p>“Lovely craft and fast shipping” — placeholder review for now.</p>
-                </div>
-                <div class="highlight-card">
-                    <h3>Shipping Info</h3>
-                    <p>Local delivery and custom orders will be detailed shortly.</p>
                 </div>
             </div>
         </div>
@@ -658,16 +644,6 @@ function renderProductDetail(product) {
                         <a href="#/contact/${product.id}" class="btn btn-yellow">Inquire About This Item</a>
                         <a href="#/catalog/${product.category}" class="btn">Back to ${getCategoryLabel(product.category)}</a>
                     </div>
-                </div>
-            </div>
-            <div class="section-footer">
-                <div class="highlight-card">
-                    <h3>Business Notes</h3>
-                    <p>Placeholder content for seller notes, delivery options, and customization requests.</p>
-                </div>
-                <div class="highlight-card">
-                    <h3>Customer Favorites</h3>
-                    <p>These product detail pages will soon show related picks and popular styles.</p>
                 </div>
             </div>
         </div>
