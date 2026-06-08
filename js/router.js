@@ -158,7 +158,7 @@ const views = {
                         </div>
                         <div class="form-control">
                             <label>Email Address</label>
-                            <input type="email" id="form-email" required>
+                            <input type="email" id="form-email">
                         </div>
                     </div>
 
