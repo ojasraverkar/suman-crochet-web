@@ -177,8 +177,8 @@ const views = {
                     </div>
 
                     <div class="form-control">
-                        <label>Phone Number (optional)</label>
-                        <input type="tel" id="form-phone" placeholder="+91 123 456 7890">
+                        <label>Phone Number</label>
+                        <input type="tel" id="form-phone" placeholder="1234567890" pattern="\d{10}" title="Enter 10 digits" required>
                     </div>
 
                     <div class="form-control">
@@ -512,7 +512,22 @@ function initContactForm() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    
+
+    const feedback = document.getElementById("form-feedback");
+    if (feedback) {
+      feedback.textContent = "";
+      feedback.className = "form-feedback";
+    }
+
+    const phoneValue = document.getElementById("form-phone").value.replace(/\D/g, '');
+    if (!/^\d{10}$/.test(phoneValue)) {
+      if (feedback) {
+        feedback.textContent = "Please enter a valid 10-digit phone number.";
+        feedback.className = "form-feedback error";
+      }
+      return;
+    }
+
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn.innerHTML;
     submitBtn.innerHTML = "Sending... ⏳";
@@ -520,7 +535,8 @@ function initContactForm() {
 
     const payload = {
       name: document.getElementById("form-name").value,
-      email: document.getElementById("form-email").value,
+      email: document.getElementById("form-email").value || "",
+      phone: phoneValue,
       itemId: itemSelect ? itemSelect.value : "",
       itemTitle: itemSelect ? (products.find(p => p.id === itemSelect.value) || {}).title || "" : "",
       itemPrice: itemSelect ? (products.find(p => p.id === itemSelect.value) || {}).price || "" : "",
