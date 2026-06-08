@@ -68,8 +68,7 @@ export const products = [
         colors: ["Blue", "White"],
         materials: ["Premium yarn", "Beads"],
         imageId: "./assets/images/ocean_bloom_earrings.png"
-    }
-    ,
+    },
     {
         id: "e03",
         category: "earrings",
